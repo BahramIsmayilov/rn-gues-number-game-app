@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Ale
 import Card from '../components/Card';
 import Colors from '../constant/colors';
 import Input from '../components/Input';
+import NumberContainer from '../components/NumberContainer';
+import MainButton from '../components/MainButton';
 
-const StartGameScreen = () => {
-	const [enterdValue, setEnteredValue] = useState('');
+const StartGameScreen = (props) => {
+	const [enterdValue, setEnteredValue] = useState();
 	const [selectedNumber, setSelectedNumber] = useState();
 	const [confrimed, setConfrimed] = useState(false);
 
@@ -21,21 +23,31 @@ const StartGameScreen = () => {
 	const confirmInputHandler = () => {
 		const choseNumber = parseInt(enterdValue);
 		if (isNaN(choseNumber) || choseNumber <= 0 || choseNumber > 99) {
-            Alert.alert(
-                'Invalid Number',
-                'Number has to be a number between 1 and 99',
-                [{text: 'Okay', style: 'destructive', onPress: resetInputHandler}]
-            )
+			Alert.alert('Invalid Number', 'Number has to be a number between 1 and 99', [
+				{ text: 'Okay', style: 'destructive', onPress: resetInputHandler },
+			]);
 			return;
 		}
 		setConfrimed(true);
 		setSelectedNumber(enterdValue);
-		setEnteredValue('');
+		setEnteredValue();
+		Keyboard.dismiss();
 	};
 	let confrimedOutput;
 
 	if (confrimed) {
-		confrimedOutput = <Text>Chosen Number: {selectedNumber}</Text>;
+		confrimedOutput = (
+			<Card style={styles.summaryContainer}>
+				<Text>Your Selected</Text>
+				<NumberContainer>{selectedNumber}</NumberContainer>
+				<MainButton
+					color={Colors.primary}
+					onPress={() => {
+						props.onPressStartGame(selectedNumber);
+					}}
+				>Start Game</MainButton>
+			</Card>
+		);
 	}
 
 	return (
@@ -82,6 +94,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 20,
 		marginVertical: 10,
+		// fontFamily: 'open-sans-bold'
 	},
 	inputContainer: {
 		width: 300,
@@ -98,6 +111,10 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		width: 50,
+	},
+	summaryContainer: {
+		marginTop: 20,
+		alignItems: 'center',
 	},
 });
 
