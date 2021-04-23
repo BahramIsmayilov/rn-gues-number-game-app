@@ -17,7 +17,7 @@ export default function App() {
 	// const [dataLoaded, setDataLoaded] = useState(false);
 
 	// fetchFonts();
-	configureNewGameHandler = () => {
+	const configureNewGameHandler = () => {
 		setGuessRounds(0);
 		setUserNumber(null);
 	};
